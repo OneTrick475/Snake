@@ -1,5 +1,4 @@
 import pygame
-import time
 from random import randrange
 pygame.font.init()
 
@@ -7,7 +6,7 @@ pygame.font.init()
 class Snake:
     body = [[250, 250], [250, 260], [250, 270]]
 
-    def hasLost(self):
+    def has_lost(self):
         if self.body[0] in self.body[1:]:
             return True
         if self.body[0][0] < 0 or self.body[0][0] > 500 or self.body[0][1] < 0 or self.body[0][1] > 500:
@@ -19,7 +18,7 @@ class Snake:
         pygame.draw.rect(win, (255, 0, 0), (apple[0], apple[1], 10, 10))
         for head in self.body:
             pygame.draw.rect(win, (255, 255, 255),
-                             (head[0], head[1], 10, 10))
+                             (head[0], head[1], 9, 9))
 
     def move(self, key):
         pygame.time.delay(100)
@@ -40,10 +39,10 @@ class Snake:
             self.body[i] = prev
             prev = prev2
 
-    def spawnApple(self):
+    def spawn_apple(self):
         return [randrange(0, 500, 10), randrange(0, 500, 10)]
 
-    def hasEatenApple(self, apple):
+    def has_eat(self, apple):
         if self.body[0] == apple:
             return True
         return False
@@ -60,7 +59,7 @@ class Snake:
         pygame.display.set_caption("Snake")
         run = True
         key = 'UP'
-        apple = self.spawnApple()
+        apple = self.spawn_apple()
 
         while run:
             for event in pygame.event.get():
@@ -76,9 +75,9 @@ class Snake:
                     if event.key == pygame.K_LEFT:
                         key = 'LEFT' if key != 'RIGHT' else 'RIGHT'
 
-            if self.hasLost():
+            if self.has_lost():
                 self.draw_lost(win)
-                pygame.event.clear
+                pygame.event.clear()
                 while True:
                     for event in pygame.event.get():
                         if event.type == pygame.QUIT:
@@ -91,7 +90,7 @@ class Snake:
 
             self.move(key)
 
-            if self.hasEatenApple(apple):
+            if self.has_eat(apple):
                 last = list(self.body[-1])
                 if key == 'UP':
                     last[1] -= 10
@@ -102,7 +101,7 @@ class Snake:
                 if key == 'LEFT':
                     last[0] -= 10
                 self.body.append(last)
-                apple = self.spawnApple()
+                apple = self.spawn_apple()
 
             self.draw(win, apple)
             pygame.display.update()
